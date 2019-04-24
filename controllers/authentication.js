@@ -33,7 +33,7 @@ module.exports = {
                             utils.sendErrorMessage(res, 'something went checking token!');
                         }
                         else {
-                            utils.sendSuccessMessage(res, { token: token });
+                            utils.sendSuccessMessage(res, { token: token, username: username });
                         }
                     });
                 } else {

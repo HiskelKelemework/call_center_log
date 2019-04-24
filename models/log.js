@@ -8,8 +8,8 @@ var Log = new Schema({
     customerName: {type: String, trim: true},
     driverName: {type: String, trim: true},
     driverNumber: {type: String, trim: true},
-    from: {type: String, trim: true},
-    to: {type: String, trim: true},
+    from: {type: String, trim: true, lowercase: true},
+    to: {type: String, trim: true, lowercase: true},
     status: {type: String, trim: true},
     reasonForCancelation: {type: String, trim: true},
     username: {type: String, trim: true},   // the person who made the change.

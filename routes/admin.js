@@ -15,10 +15,13 @@ router.post('/createUser', adminController.createUser);
 
 
 // get todays call log
-router.get('/logs', (req, res) => {});
+router.get('/logs', adminController.getTodaysLogs);
 
 // get a specific days log
-router.get('/specificLog', (req, res) => {});
+router.get('/specificLog/:date', adminController.getASpecificDaysLog);
+
+// generate report
+router.get('/report/:date', adminController.generateReport);
 
 
 module.exports = router;

@@ -23,7 +23,6 @@ module.exports = {
     addLog: function (req, res) {
         // log values
         const lv = extractLogValues(req);
-        console.log(req.body);
 
         // only this 5 parameters are required at first, others can be edited in later.
         if (utils.areNonEmpty(lv.sex, lv.customerNumber, lv.from, lv.to, lv.status)) {
@@ -48,7 +47,7 @@ module.exports = {
 
         // console.log(`log id is ${logId}`);
 
-        if (utils.areNonEmpty(lv.sex, lv.customerNumber, lv.from, lv.to, lv.status, lv.driverName, lv.driverNumber, lv.reasonForCancelation)) {
+        if (utils.areNonEmpty(lv.sex, lv.customerNumber, lv.from, lv.to, lv.status, lv.reasonForCancelation)) {
             Log.findOneAndUpdate({ _id: logId }, lv, (err, doc, result) => {
                 if (err) utils.sendErrorMessage(res, 'could not update log!');
                 else utils.sendSuccessMessage(res, { message: 'log updated successfully!' });
@@ -61,14 +60,14 @@ module.exports = {
     getTodaysLogs: function (req, res) {
         const startOfToday = moment().startOf('day').toDate();
 
-        Log.find({ time: { '$gte': startOfToday } }).select('-__v').exec((err, logs) => {
+        Log.find({ time: { '$gte': startOfToday } }).select('-username -__v').exec((err, logs) => {
             if (err) utils.sendErrorMessage(res, 'could not retrieve logs.');
             else utils.sendSuccessMessage(res, { logs: logs });
         });
     },
 
     getPlaces: function (req, res) {
-        const place = req.params.place.trim();
+        const place = req.params.place.trim().toLowerCase();
         const startsWith = RegExp("^" + place);
 
         Log.find({ '$or': [{ from: startsWith }, { to: startsWith }] }).select('from to -_id').exec((err, places) => {
