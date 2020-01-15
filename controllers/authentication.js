@@ -4,7 +4,7 @@ var User = require('../models/user');
 var utils = require('../utils/utils');
 
 const userSecret = 'USER@secret123456789';
-const adminSecret = 'ADMIN@secret123456789'
+const adminSecret = 'ADMIN@secret123456789';
 
 module.exports = {
     authenticateUser: function (req, res, account_type) {
@@ -29,11 +29,11 @@ module.exports = {
                     jwt.sign({ username: username.trim() }, secret, function (err, token) {
                         if (err) {
                             console.log(err);
-                            // hopefully will neber get called!
+                            // hopefully will never get called!
                             utils.sendErrorMessage(res, 'something went checking token!');
                         }
                         else {
-                            utils.sendSuccessMessage(res, { token: token, username: username });
+                            utils.sendSuccessMessage(res, { token: token, username: username, isAdmin: account_type == 'admin' });
                         }
                     });
                 } else {
@@ -54,8 +54,14 @@ module.exports = {
                 if (err) {
                     utils.sendErrorMessage(res, 'Invalid token!');
                 } else {
-                    req.username = decoded.username;
-                    next();
+                    User.findOne({username: decoded.username}, (err, result) => {
+                        if (err) utils.sendErrorMessage(res, 'could not validate user!');
+                        else if (!result) utils.sendErrorMessage(res, 'user does not exist!');
+                        else {
+                            req.username = decoded.username;
+                            next();
+                        }
+                    }); 
                 }
             });
         } else {

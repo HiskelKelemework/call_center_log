@@ -15,7 +15,6 @@ router.use((req, res, next) => auth.checkPoint(req, res, next, 'user'));
 // retrieve call logs of a single day
 router.get('/logs', userController.getTodaysLogs);  
 
-
 // add a new call log
 router.post('/addLog', userController.addLog);
 
